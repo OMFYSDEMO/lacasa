@@ -1,0 +1,49 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Book your stay · Lacasa Homestay</title><meta name="description" content="Family-run, women-led homestay in Sreevaraham, Thiruvananthapuram. Discover our rooms and enquire about your stay."><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet"><link rel="stylesheet" href="styles.css"><script src="site.js" defer></script></head><body><a class="skip-link" href="#main-content">Skip to content</a><main id="main-content"><div class="page-header"><header style="position:relative;z-index:2;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:16px 24px;padding:28px clamp(20px,4vw,56px);border-bottom:1px solid rgba(255,255,255,0.25)">
+      <nav style="display:flex;gap:clamp(14px,2vw,32px);font-size:12px;letter-spacing:0.16em;text-transform:uppercase;white-space:nowrap;flex:1 1 auto;order:2">
+        <a href="our-home.html" style="color:#fff">Our home</a>
+        <a href="rooms.html" style="color:#fff">Rooms</a>
+        <a href="around.html" style="color:#fff">Around</a>
+      </nav>
+      <a href="index.html" style="display:flex;flex-direction:column;align-items:center;color:#fff;gap:4px;order:1">
+        <span style="font-family:'Cormorant Garamond',serif;font-size:34px;font-weight:400;letter-spacing:0.12em;line-height:1">LACASA</span>
+        <span style="font-size:10px;letter-spacing:0.28em;text-transform:uppercase;opacity:0.85;white-space:nowrap">Homestay · Trivandrum</span>
+      </a>
+      <div style="display:flex;justify-content:flex-end;order:3">
+        <a href="contact.html#enquiry-form" style="color:#fff;border:1px solid rgba(255,255,255,0.7);padding:12px 18px;font-size:12px;letter-spacing:0.16em;text-transform:uppercase;white-space:nowrap">Book your stay</a>
+      </div>
+    </header></div><section class="enquiry"><div><p class="eyebrow">Plan your visit</p><h1>A room kept ready <em>for you</em></h1><p>Share your dates and the hosts will reply personally. This is an availability enquiry; your stay is confirmed separately.</p><p>Prefer a conversation? <a href="https://wa.me/919746998998">WhatsApp the hosts ↗</a></p></div><form action="send-enquiry.php" method="post" id="enquiry-form"><input type="hidden" name="csrf" id="csrf"><div class="form-grid"><label>Your name<input name="name" required maxlength="100" autocomplete="name"></label><label>Email address<input type="email" name="email" required maxlength="200" autocomplete="email"></label><label>Phone (optional)<input type="tel" name="phone" maxlength="40" autocomplete="tel"></label><label>Room<select name="room"><option>Standard Double</option><option>Deluxe Family</option><option>Not sure yet</option></select></label><label>Arrival<input type="date" name="arrival" required></label><label>Departure<input type="date" name="departure" required></label><label>Guests<select name="guests"><option>1</option><option selected>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select></label></div><label>Your message (optional)<textarea name="message" rows="4" maxlength="3000"></textarea></label><label class="trap" aria-hidden="true">Leave empty<input name="website" tabindex="-1" autocomplete="off"></label><label class="consent"><input type="checkbox" name="consent" value="1" required> I agree that the hosts may use these details to respond to my enquiry.</label><button type="submit" disabled>Send enquiry</button><p id="form-status" role="status" aria-live="polite">Preparing the secure form…</p><noscript>JavaScript is required for this form. Please call or WhatsApp the hosts.</noscript></form></section>  <section id="enquire" style="background:#3a3128;color:#f5f0e7">
+    <div style="max-width:1240px;margin:0 auto;padding:clamp(88px,12vw,160px) clamp(20px,4vw,56px);text-align:center;display:flex;flex-direction:column;align-items:center;gap:26px">
+      <div style="font-size:12px;letter-spacing:0.36em;text-transform:uppercase;color:#d4bf98">Come home</div>
+      <h2 style="font-family:'Cormorant Garamond',serif;font-weight:300;font-size:clamp(48px,7vw,104px);line-height:1;margin:0;text-wrap:balance">We'll keep the <em>light on for you</em></h2>
+      <p style="font-size:16px;line-height:1.8;color:#d9cfbf;margin:0;max-width:480px">Message the hosts with your dates — they reply personally with availability and the best rate.</p>
+      <div style="display:flex;gap:14px;flex-wrap:wrap;justify-content:center;margin-top:10px">
+        <a href="https://wa.me/919746998998" target="_blank" rel="noopener" style="background:#f5f0e7;color:#3a3128;padding:18px 30px;font-size:12px;letter-spacing:0.22em;text-transform:uppercase">WhatsApp the hosts</a>
+        <a href="tel:+919746998998" style="border:1px solid rgba(245,240,231,0.6);color:#f5f0e7;padding:18px 30px;font-size:12px;letter-spacing:0.22em;text-transform:uppercase">+91 97469 98998</a>
+      </div>
+    </div>
+    <footer style="border-top:1px solid rgba(245,240,231,0.18)">
+      <div style="max-width:1240px;margin:0 auto;padding:48px clamp(20px,4vw,56px);display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:36px;font-size:14px;line-height:1.8;color:#d9cfbf">
+        <div>
+          <div style="font-family:'Cormorant Garamond',serif;font-size:28px;letter-spacing:0.12em;color:#f5f0e7;line-height:1;margin-bottom:12px">LACASA</div>
+          A family-run homestay in Thiruvananthapuram, Kerala.
+        </div>
+        <div>
+          <div style="font-size:10px;letter-spacing:0.3em;text-transform:uppercase;color:#d4bf98;margin-bottom:12px">Address</div>
+          TC 40/1072, Cheppil Lane, Mukkolakal, Manacaud – Muttathara Rd, Sreevaraham P.O., Thiruvananthapuram 695009
+        </div>
+        <div style="display:flex;flex-direction:column">
+          <div style="font-size:10px;letter-spacing:0.3em;text-transform:uppercase;color:#d4bf98;margin-bottom:12px">Contact</div>
+          <a href="tel:+919746998998" style="color:#f5f0e7">+91 97469 98998</a>
+          <a href="https://wa.me/919746998998" style="color:#f5f0e7">WhatsApp</a>
+        </div>
+        <div style="display:flex;flex-direction:column">
+          <div style="font-size:10px;letter-spacing:0.3em;text-transform:uppercase;color:#d4bf98;margin-bottom:12px">Explore</div>
+          <a href="our-home.html" style="color:#f5f0e7">Our home</a>
+          <a href="rooms.html" style="color:#f5f0e7">Rooms</a>
+          <a href="around.html" style="color:#f5f0e7">Around</a>
+        </div>
+      </div>
+      <div style="max-width:1240px;margin:0 auto;padding:0 clamp(20px,4vw,56px) 36px;font-size:12px;color:#a89c8a">© 2026 Lacasa Homestay</div>
+    </footer>
+  </section>
+</main></body></html>
