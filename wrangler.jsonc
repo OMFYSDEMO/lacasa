@@ -13,7 +13,7 @@
       "database_name": "lacasa-enquiries",
       "database_id": "e3040cd0-d566-4c7a-8e71-1220dcacd122"
     }
-  ]
+  ],
 "send_email": [
   {
     "name": "EMAIL"
