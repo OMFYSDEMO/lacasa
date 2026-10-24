@@ -55,7 +55,34 @@ export default {
 
     try { await initDB(env); } catch (e) {}
 
-    if (!url.pathname.startsWith("/api/")) {
+        if (url.pathname === "/csrf.php") {
+      return json({ token: "lacasa-" + Date.now() });
+    }
+    if (url.pathname === "/send-enquiry.php" && request.method === "POST") {
+      try {
+        const fd = await request.formData();
+        const g = n => (fd.get(n) || "").toString().trim();
+        await env.DB.prepare(
+          "INSERT INTO enquiries (name,email," +
+          "phone,check_in,check_out," +
+          "guests,room_type,message)" +
+          " VALUES (?,?,?,?,?,?,?,?)"
+        ).bind(
+          g("name") || g("full_name") || "Unknown",
+          g("email") || null,
+          g("phone") || g("mobile") || null,
+          g("arrival") || g("check_in") || null,
+          g("departure") || g("check_out") || null,
+          g("guests") || null,
+          g("room_type") || g("room") || null,
+          g("message") || g("notes") || null
+        ).run();
+        return json({ message: "Thank you! Your enquiry has been received." });
+      } catch (e) {
+        return json({ message: "Please call +91 97469 98998." }, 500);
+      }
+    }
+if (!url.pathname.startsWith("/api/")) {
       return env.ASSETS.fetch(request);
     }
 
