@@ -27,7 +27,12 @@ async function auth(env, req) {
   return !!s;
 }
 
-async function initDB(env) {async function sendNotification(env, e) {
+async function initDB(env) {
+  await env.DB.exec("CREATE TABLE...");
+  await env.DB.exec("CREATE TABLE...");
+}
+
+async function sendNotification(env, e) {  // ← CORRECT: outside initDB
   try {
     const rows = [["Name", e.name], ["Email", e.email], ["Phone", e.phone], ["Check-in", e.check_in], ["Check-out", e.check_out], ["Guests", e.guests], ["Room Type", e.room_type], ["Message", e.message]];
     const html = "<h2>New Enquiry from " + (e.name || "Unknown") + "</h2><table>" + rows.map(r => '<tr><td style="padding:4px 12px;font-weight:bold;">' + r[0] + ':</td><td style="padding:4px 12px;">' + (r[1] || "-") + "</td></tr>").join("") + "</table>";
@@ -102,22 +107,23 @@ if (!url.pathname.startsWith("/api/")) {
         if (!b.name || !b.name.trim()) {
           return json({ error: "Name is required" }, 400);
         }
-        await env.DB.prepare(
-          "INSERT INTO enquiries " +
-          "(name,email,phone,check_in,check_out," +
-          "guests,room_type,message) " +
-          "VALUES (?,?,?,?,?,?,?,?)"
-        ).bind(
-          b.name.trim(),
-          b.email?.trim() || null,
-          b.phone?.trim() || null,
-          b.check_in?.trim() || null,
-          b.check_out?.trim() || null,
-          b.guests?.trim() || null,
-          b.room_type?.trim() || null,
-          b.message?.trim() || null
-        ).run();
-        await sendNotification(env, enquiry);
+        const enquiry = {
+  name: b.name.trim(),
+  email: b.email?.trim() || null,
+  phone: b.phone?.trim() || null,
+  check_in: b.check_in?.trim() || null,
+  check_out: b.check_out?.trim() || null,
+  guests: b.guests?.trim() || null,
+  room_type: b.room_type?.trim() || null,
+  message: b.message?.trim() || null,
+};
+await env.DB.prepare(
+  "INSERT INTO enquiries (name,email,phone,check_in,check_out,guests,room_type,message) VALUES (?,?,?,?,?,?,?,?)"
+).bind(
+  enquiry.name, enquiry.email, enquiry.phone, enquiry.check_in,
+  enquiry.check_out, enquiry.guests, enquiry.room_type, enquiry.message
+).run();
+await sendNotification(env, enquiry);
 return json({ success: true });
       } catch (e) {
         return json({ error: "Failed" }, 500);
