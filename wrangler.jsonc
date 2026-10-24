@@ -16,7 +16,8 @@
   ],
 "send_email": [
   {
-    "name": "EMAIL"
+    "name": "EMAIL",
+    "destination_address": "lacasatvm@gmail.com"
   }
 ]
 }
