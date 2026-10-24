@@ -27,7 +27,15 @@ async function auth(env, req) {
   return !!s;
 }
 
-async function initDB(env) {
+async function initDB(env) {async function sendNotification(env, e) {
+  try {
+    const rows = [["Name", e.name], ["Email", e.email], ["Phone", e.phone], ["Check-in", e.check_in], ["Check-out", e.check_out], ["Guests", e.guests], ["Room Type", e.room_type], ["Message", e.message]];
+    const html = "<h2>New Enquiry from " + (e.name || "Unknown") + "</h2><table>" + rows.map(r => '<tr><td style="padding:4px 12px;font-weight:bold;">' + r[0] + ':</td><td style="padding:4px 12px;">' + (r[1] || "-") + "</td></tr>").join("") + "</table>";
+    const text = "New Enquiry\n\n" + rows.map(r => r[0] + ": " + (r[1] || "-")).join("\n");
+    await env.EMAIL.send({ from: "enquiries@lacasahome.in", to: "lacasatvm@gmail.com", subject: "New Enquiry from " + (e.name || "Unknown"), html, text });
+  } catch (err) {}
+}
+
   await env.DB.exec(
     "CREATE TABLE IF NOT EXISTS enquiries (" +
     "id INTEGER PRIMARY KEY AUTOINCREMENT," +
@@ -77,7 +85,8 @@ export default {
           g("room_type") || g("room") || null,
           g("message") || g("notes") || null
         ).run();
-        return json({ message: "Thank you! Your enquiry has been received." });
+        await sendNotification(env, enquiry);
+return json({ message: "Thank you! Your enquiry has been received." });
       } catch (e) {
         return json({ message: "Please call +91 97469 98998." }, 500);
       }
@@ -108,7 +117,8 @@ if (!url.pathname.startsWith("/api/")) {
           b.room_type?.trim() || null,
           b.message?.trim() || null
         ).run();
-        return json({ success: true });
+        await sendNotification(env, enquiry);
+return json({ success: true });
       } catch (e) {
         return json({ error: "Failed" }, 500);
       }
