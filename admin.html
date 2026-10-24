@@ -5,5 +5,37 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Admin · Lacasa Homestay</title>
 <meta name="robots" content="noindex, nofollow">
-<style>
-*{margin:0;padding:0;box-sizing:border-box}body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f5f0e7;color:#3a3128}.login-wrap{max-width:400px;margin:100px auto;padding:40px;text-align:center}.login-wrap h1{font-family:'Cormorant Garamond',s
+<link rel="stylesheet" href="admin.css">
+</head>
+<body>
+
+<div class="login-wrap" id="loginScreen">
+<h1>LACASA Admin</h1>
+<p>Enter your password to manage enquiries</p>
+<input type="password" id="passwordInput" placeholder="Password">
+<button onclick="doLogin()">Login</button>
+<div class="error" id="loginError">Invalid password.</div>
+</div>
+
+<div class="dashboard" id="dashboard">
+<div class="header">
+<h1>Lacasa Enquiries</h1>
+<div class="actions">
+<span class="count" id="enquiryCount"></span>
+<button onclick="refreshEnquiries()">Refresh</button>
+<button onclick="doLogout()">Logout</button>
+</div>
+</div>
+<div class="filters">
+<button class="active" data-filter="all" onclick="setFilter('all')">All</button>
+<button data-filter="new" onclick="setFilter('new')">New</button>
+<button data-filter="read" onclick="setFilter('read')">Read</button>
+<button data-filter="replied" onclick="setFilter('replied')">Replied</button>
+<button data-filter="archived" onclick="setFilter('archived')">Archived</button>
+</div>
+<div class="enquiries" id="enquiriesList"></div>
+</div>
+
+<script src="admin.js"></script>
+</body>
+</html>
