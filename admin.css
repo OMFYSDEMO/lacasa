@@ -1,0 +1,48 @@
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,sans-serif;background:#f5f0e7;color:#3a3128}
+
+.login-wrap{max-width:400px;margin:100px auto;padding:40px;text-align:center}
+.login-wrap h1{font-family:'Cormorant Garamond',serif;font-size:36px;margin-bottom:8px}
+.login-wrap p{color:#8a7d6c;font-size:14px;margin-bottom:28px}
+.login-wrap input{width:100%;padding:14px 16px;border:1px solid #d9cdb8;border-radius:8px;font-size:16px;margin-bottom:16px;background:#fff}
+.login-wrap button{width:100%;padding:14px;background:#3a3128;color:#fff;border:none;border-radius:8px;font-size:14px;cursor:pointer}
+.login-wrap button:hover{background:#5b4a36}
+.login-wrap .error{color:#c5392a;font-size:14px;margin-top:12px;display:none}
+
+.dashboard{display:none}
+.header{background:#3a3128;color:#f5f0e7;padding:20px 32px;display:flex;justify-content:space-between;align-items:center}
+.header h1{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:400}
+.header .actions{display:flex;gap:12px;align-items:center}
+.header .count{font-size:13px;color:#d4bf98}
+.header button{background:rgba(255,255,255,.15);color:#f5f0e7;border:none;padding:10px 18px;border-radius:6px;cursor:pointer;font-size:13px}
+.header button:hover{background:rgba(255,255,255,.25)}
+
+.filters{padding:16px 32px;background:#ebe3d5;display:flex;gap:8px;flex-wrap:wrap}
+.filters button{padding:8px 16px;border:1px solid #d9cdb8;border-radius:20px;background:#fff;color:#6b5f51;cursor:pointer;font-size:13px}
+.filters button.active{background:#3a3128;color:#fff;border-color:#3a3128}
+
+.enquiries{padding:24px 32px}
+.enquiry-card{background:#fff;border-radius:12px;padding:24px;margin-bottom:16px;box-shadow:0 1px 3px rgba(0,0,0,.06);border-left:4px solid #d9cdb8}
+.enquiry-card.new{border-left-color:#c5392a}
+.enquiry-card.read{border-left-color:#8a6a3e}
+.enquiry-card.replied{border-left-color:#4a7c4a}
+.enquiry-card.archived{opacity:.6}
+.enquiry-card .top{display:flex;justify-content:space-between;align-items:start;margin-bottom:16px}
+.enquiry-card .name{font-size:20px;font-weight:500}
+.enquiry-card .date{font-size:12px;color:#8a7d6c}
+.enquiry-card .details{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:8px 24px;margin-bottom:16px}
+.enquiry-card .detail label{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:#8a7d6c;margin-bottom:2px}
+.enquiry-card .detail span{color:#3a3128}
+.enquiry-card .message{font-size:14px;line-height:1.6;color:#6b5f51;padding:12px;background:#faf8f4;border-radius:8px;margin-bottom:16px}
+.enquiry-card .actions{display:flex;gap:8px;flex-wrap:wrap}
+.enquiry-card .actions button,.enquiry-card .actions a{padding:8px 14px;border:1px solid #d9cdb8;border-radius:6px;font-size:12px;cursor:pointer;text-decoration:none;color:#6b5f51;background:#fff}
+.enquiry-card .actions button:hover,.enquiry-card .actions a:hover{background:#f5f0e7}
+.enquiry-card .actions .danger{color:#c5392a;border-color:#e8c5bf}
+.enquiry-card .actions .danger:hover{background:#fdf0ee}
+.status-badge{font-size:11px;text-transform:uppercase;letter-spacing:.1em;padding:4px 10px;border-radius:12px}
+.status-badge.new{background:#fde8e6;color:#c5392a}
+.status-badge.read{background:#faf0e0;color:#8a6a3e}
+.status-badge.replied{background:#e8f5e8;color:#4a7c4a}
+.status-badge.archived{background:#eee;color:#999}
+.empty{text-align:center;padding:60px 20px;color:#8a7d6c}
+.empty h2{font-family:'Cormorant Garamond',serif;font-size:28px;margin-bottom:8px}
