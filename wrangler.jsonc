@@ -1,0 +1,17 @@
+{
+  "name": "lacasa",
+  "main": "worker.js",
+  "compatibility_date": "2026-10-19",
+  "assets": {
+    "directory": ".",
+    "binding": "ASSETS",
+    "run_worker_first": ["/api/*", "/admin.html"]
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "lacasa-enquiries",
+      "database_id": "e3040cd0-d566-4c7a-8e71-1220dcacd122"
+    }
+  ]
+}
