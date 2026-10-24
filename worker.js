@@ -14,7 +14,7 @@ function json(data, status = 200) {
 function token() {
   const a = new Uint8Array(32);
   crypto.getRandomValues(a);
-  return Array.from(a, b => b.toString(16).padStart(2, "0")).join("");
+  return Array.from(a, (b) => b.toString(16).padStart(2, "0")).join("");
 }
 
 async function auth(env, req) {
@@ -28,19 +28,6 @@ async function auth(env, req) {
 }
 
 async function initDB(env) {
-  await env.DB.exec("CREATE TABLE...");
-  await env.DB.exec("CREATE TABLE...");
-}
-
-async function sendNotification(env, e) {  // ← CORRECT: outside initDB
-  try {
-    const rows = [["Name", e.name], ["Email", e.email], ["Phone", e.phone], ["Check-in", e.check_in], ["Check-out", e.check_out], ["Guests", e.guests], ["Room Type", e.room_type], ["Message", e.message]];
-    const html = "<h2>New Enquiry from " + (e.name || "Unknown") + "</h2><table>" + rows.map(r => '<tr><td style="padding:4px 12px;font-weight:bold;">' + r[0] + ':</td><td style="padding:4px 12px;">' + (r[1] || "-") + "</td></tr>").join("") + "</table>";
-    const text = "New Enquiry\n\n" + rows.map(r => r[0] + ": " + (r[1] || "-")).join("\n");
-    await env.EMAIL.send({ from: "enquiries@lacasahome.in", to: "lacasatvm@gmail.com", subject: "New Enquiry from " + (e.name || "Unknown"), html, text });
-  } catch (err) {}
-}
-
   await env.DB.exec(
     "CREATE TABLE IF NOT EXISTS enquiries (" +
     "id INTEGER PRIMARY KEY AUTOINCREMENT," +
@@ -58,6 +45,15 @@ async function sendNotification(env, e) {  // ← CORRECT: outside initDB
   );
 }
 
+async function sendNotification(env, e) {
+  try {
+    const rows = [["Name", e.name], ["Email", e.email], ["Phone", e.phone], ["Check-in", e.check_in], ["Check-out", e.check_out], ["Guests", e.guests], ["Room Type", e.room_type], ["Message", e.message]];
+    const html = "<h2>New Enquiry from " + (e.name || "Unknown") + "</h2><table>" + rows.map(r => '<tr><td style="padding:4px 12px;font-weight:bold;">' + r[0] + ':</td><td style="padding:4px 12px;">' + (r[1] || "-") + "</td></tr>").join("") + "</table>";
+    const text = "New Enquiry\n\n" + rows.map(r => r[0] + ": " + (r[1] || "-")).join("\n");
+    await env.EMAIL.send({ from: "enquiries@lacasahome.in", to: "lacasatvm@gmail.com", subject: "New Enquiry from " + (e.name || "Unknown"), html, text });
+  } catch (err) {}
+}
+
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
@@ -68,39 +64,41 @@ export default {
 
     try { await initDB(env); } catch (e) {}
 
-        if (url.pathname === "/csrf.php") {
+    if (url.pathname === "/csrf.php") {
       return json({ token: "lacasa-" + Date.now() });
     }
+
     if (url.pathname === "/send-enquiry.php" && request.method === "POST") {
       try {
         const fd = await request.formData();
         const g = n => (fd.get(n) || "").toString().trim();
+        const enquiry = {
+          name: g("name") || g("full_name") || "Unknown",
+          email: g("email") || null,
+          phone: g("phone") || g("mobile") || null,
+          check_in: g("arrival") || g("check_in") || null,
+          check_out: g("departure") || g("check_out") || null,
+          guests: g("guests") || null,
+          room_type: g("room_type") || g("room") || null,
+          message: g("message") || g("notes") || null,
+        };
         await env.DB.prepare(
-          "INSERT INTO enquiries (name,email," +
-          "phone,check_in,check_out," +
-          "guests,room_type,message)" +
-          " VALUES (?,?,?,?,?,?,?,?)"
+          "INSERT INTO enquiries (name,email,phone,check_in,check_out,guests,room_type,message) VALUES (?,?,?,?,?,?,?,?)"
         ).bind(
-          g("name") || g("full_name") || "Unknown",
-          g("email") || null,
-          g("phone") || g("mobile") || null,
-          g("arrival") || g("check_in") || null,
-          g("departure") || g("check_out") || null,
-          g("guests") || null,
-          g("room_type") || g("room") || null,
-          g("message") || g("notes") || null
+          enquiry.name, enquiry.email, enquiry.phone, enquiry.check_in,
+          enquiry.check_out, enquiry.guests, enquiry.room_type, enquiry.message
         ).run();
         await sendNotification(env, enquiry);
-return json({ message: "Thank you! Your enquiry has been received." });
+        return json({ message: "Thank you! Your enquiry has been received." });
       } catch (e) {
         return json({ message: "Please call +91 97469 98998." }, 500);
       }
     }
-if (!url.pathname.startsWith("/api/")) {
+
+    if (!url.pathname.startsWith("/api/")) {
       return env.ASSETS.fetch(request);
     }
 
-    // POST /api/enquiry
     if (url.pathname === "/api/enquiry" && request.method === "POST") {
       try {
         const b = await request.json();
@@ -108,29 +106,28 @@ if (!url.pathname.startsWith("/api/")) {
           return json({ error: "Name is required" }, 400);
         }
         const enquiry = {
-  name: b.name.trim(),
-  email: b.email?.trim() || null,
-  phone: b.phone?.trim() || null,
-  check_in: b.check_in?.trim() || null,
-  check_out: b.check_out?.trim() || null,
-  guests: b.guests?.trim() || null,
-  room_type: b.room_type?.trim() || null,
-  message: b.message?.trim() || null,
-};
-await env.DB.prepare(
-  "INSERT INTO enquiries (name,email,phone,check_in,check_out,guests,room_type,message) VALUES (?,?,?,?,?,?,?,?)"
-).bind(
-  enquiry.name, enquiry.email, enquiry.phone, enquiry.check_in,
-  enquiry.check_out, enquiry.guests, enquiry.room_type, enquiry.message
-).run();
-await sendNotification(env, enquiry);
-return json({ success: true });
+          name: b.name.trim(),
+          email: b.email?.trim() || null,
+          phone: b.phone?.trim() || null,
+          check_in: b.check_in?.trim() || null,
+          check_out: b.check_out?.trim() || null,
+          guests: b.guests?.trim() || null,
+          room_type: b.room_type?.trim() || null,
+          message: b.message?.trim() || null,
+        };
+        await env.DB.prepare(
+          "INSERT INTO enquiries (name,email,phone,check_in,check_out,guests,room_type,message) VALUES (?,?,?,?,?,?,?,?)"
+        ).bind(
+          enquiry.name, enquiry.email, enquiry.phone, enquiry.check_in,
+          enquiry.check_out, enquiry.guests, enquiry.room_type, enquiry.message
+        ).run();
+        await sendNotification(env, enquiry);
+        return json({ success: true });
       } catch (e) {
         return json({ error: "Failed" }, 500);
       }
     }
 
-    // POST /api/admin/login
     if (url.pathname === "/api/admin/login" && request.method === "POST") {
       try {
         const b = await request.json();
@@ -138,9 +135,7 @@ return json({ success: true });
           return json({ error: "Invalid password" }, 401);
         }
         const t = token();
-        const exp = new Date(
-          Date.now() + 86400000
-        ).toISOString();
+        const exp = new Date(Date.now() + 86400000).toISOString();
         await env.DB.prepare(
           "INSERT INTO sessions (token,expires_at) VALUES (?,?)"
         ).bind(t, exp).run();
@@ -150,12 +145,10 @@ return json({ success: true });
       }
     }
 
-    // All remaining routes need auth
     if (!await auth(env, request)) {
       return json({ error: "Unauthorized" }, 401);
     }
 
-    // GET /api/enquiries
     if (url.pathname === "/api/enquiries" && request.method === "GET") {
       const r = await env.DB.prepare(
         "SELECT * FROM enquiries ORDER BY created_at DESC"
@@ -165,37 +158,31 @@ return json({ success: true });
 
     const m = url.pathname.match(/^\/api\/enquiries\/(\d+)$/);
 
-    // GET /api/enquiries/:id
     if (m && request.method === "GET") {
-      const e = await env.DB.prepare(
-        "SELECT * FROM enquiries WHERE id=?"
-      ).bind(m[1]).first();
+      const e = await env.DB.prepare("SELECT * FROM enquiries WHERE id=?")
+        .bind(m[1]).first();
       if (!e) return json({ error: "Not found" }, 404);
       return json({ enquiry: e });
     }
 
-    // PATCH /api/enquiries/:id
     if (m && request.method === "PATCH") {
       try {
         const b = await request.json();
-        const valid = ["new","read","replied","archived"];
+        const valid = ["new", "read", "replied", "archived"];
         if (!valid.includes(b.status)) {
           return json({ error: "Invalid status" }, 400);
         }
-        await env.DB.prepare(
-          "UPDATE enquiries SET status=? WHERE id=?"
-        ).bind(b.status, m[1]).run();
+        await env.DB.prepare("UPDATE enquiries SET status=? WHERE id=?")
+          .bind(b.status, m[1]).run();
         return json({ success: true });
       } catch (e) {
         return json({ error: "Update failed" }, 500);
       }
     }
 
-    // DELETE /api/enquiries/:id
     if (m && request.method === "DELETE") {
-      await env.DB.prepare(
-        "DELETE FROM enquiries WHERE id=?"
-      ).bind(m[1]).run();
+      await env.DB.prepare("DELETE FROM enquiries WHERE id=?")
+        .bind(m[1]).run();
       return json({ success: true });
     }
 
